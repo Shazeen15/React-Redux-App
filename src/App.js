@@ -6,16 +6,17 @@ import { getAmiiboChar } from "./actions";
 import amiiboLogo from "./img/amiiboLogo.png";
 
 function App(props) {
+  const { getAmiiboChar, amiiboChars } = props;
   useEffect(() => {
-    props.getAmiiboChar();
-  }, []);
+    getAmiiboChar();
+  }, [getAmiiboChar]);
 
   return (
     <React.Fragment>
       <div className="logo">
         <img src={amiiboLogo} alt="amiibo logo" />
       </div>
-      <AmiiboCharacters amiiboChars={props.amiiboChars} />
+      <AmiiboCharacters amiiboChars={amiiboChars} />
     </React.Fragment>
   );
 }
