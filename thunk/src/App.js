@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import CityForm from "./component/CityForm";
+import { connect } from "react-redux";
 
-function App() {
+import { setBreweries } from "./utils/actions/breweriesAction";
+function App(props) {
+  const { fetching, breweries, error, setBreweries, city } = props;
+  useEffect(() => {
+    setBreweries(city);
+  }, [setBreweries, city]);
+  if (fetching) {
+    return <h1>Getting data</h1>;
+  }
+  if (error) {
+    return <h1>{error}</h1>;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CityForm />
+      {breweries.map((brew) => (
+        <section key={brew.id}>
+          <h1>{brew.name}</h1>
+        </section>
+      ))}
+    </>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    breweries: state.breweries.breweries,
+    fetching: state.breweries.fetching,
+    error: state.breweries.error,
+    city: state.cityForm.city,
+  };
+};
+
+export default connect(mapStateToProps, { setBreweries })(App);
